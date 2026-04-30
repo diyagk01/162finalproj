@@ -1,0 +1,12 @@
+reset;
+model task2.mod;
+data task1.dat;
+data task2.dat;
+
+option solver cplex;
+solve;
+
+display TotalCost;
+display {i in VENUES} y[i];
+display {j in SPORTS, t in WEEKS: w[j,t] > 0.5} (j, t, w[j,t]);
+display {i in VENUES, j in SPORTS, t in WEEKS: z[i,j,t] > 0.5} (i, j, t, z[i,j,t]);

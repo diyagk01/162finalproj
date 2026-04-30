@@ -1,0 +1,10 @@
+reset;
+model task1.mod;
+data task1.dat;
+
+option solver highs;
+solve;
+
+display TotalCost;
+display {i in VENUES} y[i];
+display {j in SPORTS, i in VENUES: x[i,j] > 0.5} (j, i, x[i,j]);
