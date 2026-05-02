@@ -1,8 +1,8 @@
 set VENUES;
 set SPORTS;
 
-param c {VENUES};        # fixed opening cost (thousand dollars)
-param kappa {VENUES};    # max number of sports hosted at venue
+param c {VENUES};        # fixed opening cost
+param kappa {VENUES};    # max # of sports hosted @ venue
 param a {VENUES, SPORTS} binary;  # eligibility matrix
 
 var y {i in VENUES} binary;                 # 1 if venue i is opened
