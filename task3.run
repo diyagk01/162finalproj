@@ -7,17 +7,15 @@ data  task3.dat;   # Cap, D
 option solver cplex;
 solve;
 
-# --- Headline numbers ---
 display NetCost;
-display sum {i in VENUES} c[i] * y[i];                                          # fixed cost
-display 10 * sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];      # revenue
-display sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];           # total tickets (k)
+display sum {i in VENUES} c[i] * y[i];                                          # FC
+display 10 * sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];      # rev
+display sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];           # total tickets (1000s)
 
-# --- Solution detail ---
 display {i in VENUES} y[i];
 display {j in SPORTS, t in WEEKS: w[j,t] > 0.5} (j, t);
 display {i in VENUES, j in SPORTS, t in WEEKS: z[i,j,t] > 0.5} (i, j, t, m[i,j]);
 
-# Tickets sold per sport (thousands).
+# Tickets sold / sport (100s)
 display {j in SPORTS}
     sum {i in VENUES, t in WEEKS} m[i,j] * z[i,j,t];
