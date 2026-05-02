@@ -1,0 +1,23 @@
+reset;
+model task3.mod;
+data  task1.dat;   # VENUES, SPORTS, c, kappa, a
+data  task2.dat;   # WEEKS, R
+data  task3.dat;   # Cap, D
+
+option solver cplex;
+solve;
+
+# --- Headline numbers ---
+display NetCost;
+display sum {i in VENUES} c[i] * y[i];                                          # fixed cost
+display 10 * sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];      # revenue
+display sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];           # total tickets (k)
+
+# --- Solution detail ---
+display {i in VENUES} y[i];
+display {j in SPORTS, t in WEEKS: w[j,t] > 0.5} (j, t);
+display {i in VENUES, j in SPORTS, t in WEEKS: z[i,j,t] > 0.5} (i, j, t, m[i,j]);
+
+# Tickets sold per sport (thousands).
+display {j in SPORTS}
+    sum {i in VENUES, t in WEEKS} m[i,j] * z[i,j,t];

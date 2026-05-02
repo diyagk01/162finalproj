@@ -1,0 +1,31 @@
+# Additional data for Task 3:
+# venue capacities (thousands of seats) and per-session demands (thousands of tickets).
+
+param Cap :=
+  V1  70
+  V2  90
+  V3  20
+  V4  27
+  V5  12
+  V6  10
+  V7  11
+  V8   8
+  V9  17
+  V10  8;
+
+param D :=
+  S1  30
+  S2  15
+  S3   9
+  S4  32
+  S5   9
+  S6   8
+  S7   7
+  S8   5
+  S9  10
+  S10 12
+  S11 20
+  S12  6
+  S13  4
+  S14  8
+  S15 10;
