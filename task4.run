@@ -7,34 +7,29 @@ data  task3.dat;   # Cap, D
 option solver cplex;
 solve;
 
-# ---------------- Headline numbers ----------------
 display NetCost;
-display sum {i in VENUES} c[i] * y[i];                                                          # venue fixed cost
-display 20 * (sum {(i,k) in N2} b2[i,k] + sum {(i,k,l) in N3} b3[i,k,l]);                       # bus fixed cost
-display 10 * sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];                      # base revenue
+display sum {i in VENUES} c[i] * y[i];                                                         
+display 20 * (sum {(i,k) in N2} b2[i,k] + sum {(i,k,l) in N3} b3[i,k,l]);                     
+display 10 * sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];                     
 display 10 * (sum {(i,k) in N2, t in WEEKS} rev2[i,k,t]
             + sum {(i,k,l) in N3, t in WEEKS}
-                  (rev3F[i,k,l,t] + rev3A[i,k,l,t] + rev3B[i,k,l,t] + rev3C[i,k,l,t]));         # bus revenue
-display sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];                           # base tickets (k)
+                  (rev3F[i,k,l,t] + rev3A[i,k,l,t] + rev3B[i,k,l,t] + rev3C[i,k,l,t]));        
+display sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];                           
 display sum {(i,k) in N2, t in WEEKS} rev2[i,k,t]
       + sum {(i,k,l) in N3, t in WEEKS}
-            (rev3F[i,k,l,t] + rev3A[i,k,l,t] + rev3B[i,k,l,t] + rev3C[i,k,l,t]);                # bus tickets (k)
+            (rev3F[i,k,l,t] + rev3A[i,k,l,t] + rev3B[i,k,l,t] + rev3C[i,k,l,t]);             
 
-# ---------------- Schedule ----------------
 display {i in VENUES} y[i];
 display {j in SPORTS, t in WEEKS: w[j,t] > 0.5} (j, t);
 display {i in VENUES, j in SPORTS, t in WEEKS: z[i,j,t] > 0.5} (i, j, t, m[i,j]);
 
-# ---------------- Bus networks established ----------------
 display {(i,k)   in N2: b2[i,k]   > 0.5} (i,k);
 display {(i,k,l) in N3: b3[i,k,l] > 0.5} (i,k,l);
 
-# ---------------- Bus network activations per week ----------------
 display {(i,k)   in N2, t in WEEKS: u2[i,k,t]    > 0.5} (i,k,t);
 display {(i,k,l) in N3, t in WEEKS: u3F[i,k,l,t] > 0.5} (i,k,l,t);
 display {(i,k,l) in N3, t in WEEKS: u3A[i,k,l,t] > 0.5} (i,k,l,t);
 display {(i,k,l) in N3, t in WEEKS: u3B[i,k,l,t] > 0.5} (i,k,l,t);
 display {(i,k,l) in N3, t in WEEKS: u3C[i,k,l,t] > 0.5} (i,k,l,t);
 
-# ---------------- Tickets per sport (base only) ----------------
 display {j in SPORTS} sum {i in VENUES, t in WEEKS} m[i,j] * z[i,j,t];
