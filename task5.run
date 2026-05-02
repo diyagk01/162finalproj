@@ -1,0 +1,77 @@
+### Task 5: solve the three sensitivity scenarios in sequence ###
+reset;
+model task5.mod;
+data  task1.dat;
+data  task2.dat;
+data  task3.dat;
+
+option solver cplex;
+
+# --- Helper print routine, used after each solve ---
+# (We just rerun the same display block for each scenario.)
+
+# =====================================================================
+# Scenario 1: profit per ticket = $5 (instead of $10)
+# =====================================================================
+let p    := 5;
+let dmul := 1.0;
+let {i in VENUES, j in SPORTS} m[i,j] := min(D[j]*dmul, Cap[i]);
+
+printf "\n========== Scenario 1: p = 5 ==========\n";
+solve;
+
+display NetCost;
+display sum {i in VENUES} c[i] * y[i];                                                          # venue cost
+display 20 * (sum {(i,k) in N2} b2[i,k] + sum {(i,k,l) in N3} b3[i,k,l]);                       # bus cost
+display p * sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];                       # base revenue
+display p * (sum {(i,k) in N2, t in WEEKS} rev2[i,k,t]
+           + sum {(i,k,l) in N3, t in WEEKS}
+                 (rev3F[i,k,l,t] + rev3A[i,k,l,t] + rev3B[i,k,l,t] + rev3C[i,k,l,t]));         # bus revenue
+display {i in VENUES} y[i];
+display {(i,k)   in N2: b2[i,k]   > 0.5} (i,k);
+display {(i,k,l) in N3: b3[i,k,l] > 0.5} (i,k,l);
+display {j in SPORTS, t in WEEKS: w[j,t] > 0.5} (j, t);
+
+# =====================================================================
+# Scenario 2: profit per ticket = $15
+# =====================================================================
+let p    := 15;
+let dmul := 1.0;
+let {i in VENUES, j in SPORTS} m[i,j] := min(D[j]*dmul, Cap[i]);
+
+printf "\n========== Scenario 2: p = 15 ==========\n";
+solve;
+
+display NetCost;
+display sum {i in VENUES} c[i] * y[i];
+display 20 * (sum {(i,k) in N2} b2[i,k] + sum {(i,k,l) in N3} b3[i,k,l]);
+display p * sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];
+display p * (sum {(i,k) in N2, t in WEEKS} rev2[i,k,t]
+           + sum {(i,k,l) in N3, t in WEEKS}
+                 (rev3F[i,k,l,t] + rev3A[i,k,l,t] + rev3B[i,k,l,t] + rev3C[i,k,l,t]));
+display {i in VENUES} y[i];
+display {(i,k)   in N2: b2[i,k]   > 0.5} (i,k);
+display {(i,k,l) in N3: b3[i,k,l] > 0.5} (i,k,l);
+display {j in SPORTS, t in WEEKS: w[j,t] > 0.5} (j, t);
+
+# =====================================================================
+# Scenario 3: demand overestimated by 10% (true demand = 90% of stated)
+# =====================================================================
+let p    := 10;
+let dmul := 0.9;
+let {i in VENUES, j in SPORTS} m[i,j] := min(D[j]*dmul, Cap[i]);
+
+printf "\n========== Scenario 3: demand x 0.9 ==========\n";
+solve;
+
+display NetCost;
+display sum {i in VENUES} c[i] * y[i];
+display 20 * (sum {(i,k) in N2} b2[i,k] + sum {(i,k,l) in N3} b3[i,k,l]);
+display p * sum {i in VENUES, j in SPORTS, t in WEEKS} m[i,j] * z[i,j,t];
+display p * (sum {(i,k) in N2, t in WEEKS} rev2[i,k,t]
+           + sum {(i,k,l) in N3, t in WEEKS}
+                 (rev3F[i,k,l,t] + rev3A[i,k,l,t] + rev3B[i,k,l,t] + rev3C[i,k,l,t]));
+display {i in VENUES} y[i];
+display {(i,k)   in N2: b2[i,k]   > 0.5} (i,k);
+display {(i,k,l) in N3: b3[i,k,l] > 0.5} (i,k,l);
+display {j in SPORTS, t in WEEKS: w[j,t] > 0.5} (j, t);
